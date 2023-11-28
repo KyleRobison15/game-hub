@@ -10,10 +10,17 @@ import { CanceledError } from "axios";
  * It also makes our components much cleaner, as we do not need to include the state hooks and axios GET request logic in our components
  */
 
+export interface Platform {
+  id: number;
+  name: string;
+  slug: string;
+}
+
 export interface Game {
   id: number;
   name: string;
   background_image: string;
+  parent_platforms: { platform: Platform }[];
 }
 
 interface FetchGamesResponse {
