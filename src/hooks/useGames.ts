@@ -21,6 +21,7 @@ export interface Game {
   background_image: string;
   parent_platforms: { platform: Platform }[];
   metacritic: number;
+  rating_top: number;
 }
 
 // Our useGames hook returns another function here that returns a more generic useData hook
