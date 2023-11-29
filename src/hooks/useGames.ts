@@ -40,6 +40,8 @@ const useGames = (gameQuery: GameQuery) =>
         parent_platforms: gameQuery.platform?.id,
       },
     },
+    // Before refactoring we had multiple dependencies in our dependency array
+    // By having the gameQuery object as the only dep,  any time this GameQuery changes any property,  the effect hook will re-fetch the data from the server with the new query
     [gameQuery]
   );
 
