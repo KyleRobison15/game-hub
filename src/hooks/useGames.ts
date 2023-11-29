@@ -32,6 +32,7 @@ interface FetchGamesResponse {
 const useGames = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Here we use the AbortController class that is built into modern browsers
@@ -40,12 +41,19 @@ const useGames = () => {
     // --> ie. In the event the user navigates away from the page while the request is still processing
     const controller = new AbortController();
 
+    // Set the isLoading state to True
+    setIsLoading(true);
+
     apiClient
       // Pass a second argument to this function which is a configuration object for our GET request
       // We set the signal property of our config object to the signal from our AbortController class
       // This is how we connect the async process we want to cancel to our AbortController
       .get<FetchGamesResponse>("/games", { signal: controller.signal })
-      .then((res) => setGames(res.data.results))
+      .then((res) => {
+        setGames(res.data.results);
+        // Set isLoading state back to false if we have completed the request successfully
+        setIsLoading(false);
+      })
       .catch((err) => {
         // Check if this error was a result of aborting our GET request
         if (err instanceof CanceledError) {
@@ -54,6 +62,8 @@ const useGames = () => {
         }
         // Otherwise update the error state object
         setError(err.message);
+        // Set isLoading state back to false if we have encountered an error
+        setIsLoading(false);
       });
 
     // Cleanup function for cancelling the fetch request in case the data is no longer needed
@@ -65,7 +75,7 @@ const useGames = () => {
     return () => controller.abort();
   }, []);
 
-  return { games, error };
+  return { games, error, isLoading };
 };
 
 export default useGames;
