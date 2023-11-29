@@ -7,6 +7,14 @@ import { Genre } from "./hooks/useGenres";
 import PlatformSelector from "./components/PlatformSelector";
 import { Platform } from "./hooks/useGames";
 
+// Query object pattern:  Create an object that contains all the information we need to query our resource
+// --> In this case, we create a GameQuery which has all the info we need to query our games
+// With this setup we don't have to have separate state objects for all our
+export interface GameQuery {
+  genre: Genre | null;
+  platform: Platform | null;
+}
+
 function App() {
   ///////////////////////////// NOTE: Typescript /////////////////////////////////////////////////
   // REMEMBER! the Typescript compiler doesn't know this selectedGenre variable can store data of type Genre, unless we give it a type parameter of Genre
@@ -20,11 +28,13 @@ function App() {
   // --> So we must LIFT the state up to the nearest parent of the components we will be sharing this with
   // --> This way, our <GenreList /> component can notifiy the <App /> component of any changes in the selectedGenre
   // --> Then, we pass the selectedGenre to our <GameGrid /> component as a prop so the games can be filtered
-  const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
+  // const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
 
-  const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(
-    null
-  );
+  // const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(
+  //   null
+  // );
+
+  const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
 
   return (
     <Grid
@@ -43,20 +53,19 @@ function App() {
       <Show above="lg">
         <GridItem area="aside" paddingX={5}>
           <GenreList
-            onSelectGenre={(genre) => setSelectedGenre(genre)}
-            selectedGenre={selectedGenre}
+            onSelectGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
+            selectedGenre={gameQuery.genre}
           />
         </GridItem>
       </Show>
       <GridItem area="main">
         <PlatformSelector
-          selectedPlatform={selectedPlatform}
-          onSelectPlatform={(platform) => setSelectedPlatform(platform)}
+          selectedPlatform={gameQuery.platform}
+          onSelectPlatform={(platform) =>
+            setGameQuery({ ...gameQuery, platform })
+          }
         />
-        <GameGrid
-          selectedGenre={selectedGenre}
-          selectedPlatform={selectedPlatform}
-        />
+        <GameGrid gameQuery={gameQuery} />
       </GridItem>
     </Grid>
   );

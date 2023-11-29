@@ -3,16 +3,15 @@ import useGames, { Platform } from "../hooks/useGames";
 import GameCard from "./GameCard";
 import GameCardSkeleton from "./GameCardSkeleton";
 import GameCardContainer from "./GameCardContainer";
-import { Genre } from "../hooks/useGenres";
+import { GameQuery } from "../App";
 
 interface Props {
-  selectedGenre: Genre | null;
-  selectedPlatform: Platform | null;
+  gameQuery: GameQuery;
 }
 
-const GameGrid = ({ selectedGenre, selectedPlatform }: Props) => {
-  // Pass the selectedGenre to our useGames hook so we can filter the games we get from the server
-  const { data, error, isLoading } = useGames(selectedGenre, selectedPlatform);
+const GameGrid = ({ gameQuery }: Props) => {
+  // Pass the GameQuery object to our useGames hook so we can filter the games we get from the server based on the properties within the GameQuery
+  const { data, error, isLoading } = useGames(gameQuery);
 
   // A local variable works here because it is not going to change over time
   // We are initilizing the skeletons array with 20 indexes every time so we can render six skeletons on the page
