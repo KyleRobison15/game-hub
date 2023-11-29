@@ -1,3 +1,5 @@
+import noImage from "../assets/no-image-placeholder-6f3882e0.webp";
+
 /**
  * This utility service is used to add paramaters to an existing URL
  * It accepts the URL, along with the target parameter after which you want to add the additional parameters
@@ -5,8 +7,10 @@
  */
 
 const extendUrlParams = (url: string, target: string, addedParams: string) => {
+  // If the image URL is falsey, return our "noImage" placeholder
+  // We must import this from our assets module so the image displays when we deploy our code. We can't hard code the relative file path..
   if (!url) {
-    return "";
+    return noImage;
   }
 
   // Find the starting position of the target parameter in the URL
