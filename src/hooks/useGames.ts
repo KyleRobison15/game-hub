@@ -30,9 +30,19 @@ export interface Game {
 // The rawg.io API allows a genre ID as a query param which will fetch only games in that genre
 // We also need to pass the selectedGenre as a dependency in the dependency array of the useData hook
 // --> This is so that the useEffect hook runs every time the selectedGenre changes in our useData hook
-const useGames = (selectedGenre: Genre | null) =>
-  useData<Game>("/games", { params: { genres: selectedGenre?.id } }, [
-    selectedGenre?.id,
-  ]);
+const useGames = (
+  selectedGenre: Genre | null,
+  selectedPlatform: Platform | null
+) =>
+  useData<Game>(
+    "/games",
+    {
+      params: {
+        genres: selectedGenre?.id,
+        parent_platforms: selectedPlatform?.id,
+      },
+    },
+    [selectedGenre?.id, selectedPlatform?.id]
+  );
 
 export default useGames;
