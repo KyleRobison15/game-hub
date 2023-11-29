@@ -3,12 +3,15 @@ import useGames from "../hooks/useGames";
 import GameCard from "./GameCard";
 import GameCardSkeleton from "./GameCardSkeleton";
 import GameCardContainer from "./GameCardContainer";
+import { Genre } from "../hooks/useGenres";
 
-const GameGrid = () => {
-  // The useGames hook is a custom hook we created that returns two objects:
-  // games -> The array of games we get from making a GET request to the /games endpoint of the RAWG.io API
-  // error -> An error object if there are any errors when making our GET request
-  const { data, error, isLoading } = useGames();
+interface Props {
+  selectedGenre: Genre | null;
+}
+
+const GameGrid = ({ selectedGenre }: Props) => {
+  // Pass the selectedGenre to our useGames hook so we can filter the games we get from the server
+  const { data, error, isLoading } = useGames(selectedGenre);
 
   // A local variable works here because it is not going to change over time
   // We are initilizing the skeletons array with 20 indexes every time so we can render six skeletons on the page
@@ -26,13 +29,13 @@ const GameGrid = () => {
       >
         {isLoading &&
           skeletons.map((skeleton) => (
-            <GameCardContainer>
-              <GameCardSkeleton key={skeleton} />
+            <GameCardContainer key={skeleton}>
+              <GameCardSkeleton />
             </GameCardContainer>
           ))}
         {data.map((game) => (
-          <GameCardContainer>
-            <GameCard key={game.id} game={game} />
+          <GameCardContainer key={game.id}>
+            <GameCard game={game} />
           </GameCardContainer>
         ))}
       </SimpleGrid>

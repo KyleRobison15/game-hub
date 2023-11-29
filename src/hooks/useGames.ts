@@ -1,4 +1,5 @@
 import useData from "./useData";
+import { Genre } from "./useGenres";
 
 /**
  * Custom hook for making a GET request to the RAWG.io /games endpoint
@@ -22,6 +23,16 @@ export interface Game {
   metacritic: number;
 }
 
-const useGames = () => useData<Game>("/games");
+// Our useGames hook returns another function here that returns a more generic useData hook
+// We did this because our useData hook is more generic for fetching any kind of data, not just games
+// --> See the useData hook for more details
+// We pass the endpoint along with the selectedGenre as the axios request params to this useData hook
+// The rawg.io API allows a genre ID as a query param which will fetch only games in that genre
+// We also need to pass the selectedGenre as a dependency in the dependency array of the useData hook
+// --> This is so that the useEffect hook runs every time the selectedGenre changes in our useData hook
+const useGames = (selectedGenre: Genre | null) =>
+  useData<Game>("/games", { params: { genres: selectedGenre?.id } }, [
+    selectedGenre?.id,
+  ]);
 
 export default useGames;
