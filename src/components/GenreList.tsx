@@ -1,4 +1,11 @@
-import { Button, HStack, Image, List, ListItem } from "@chakra-ui/react";
+import {
+  Button,
+  HStack,
+  Heading,
+  Image,
+  List,
+  ListItem,
+} from "@chakra-ui/react";
 import useGenres, { Genre } from "../hooks/useGenres";
 import extendUrlParams from "../services/image-url";
 import GenreListSkeleton from "./GenreListSkeleton";
@@ -23,33 +30,42 @@ const GenreList = ({ onSelectGenre, selectedGenre }: Props) => {
   }
 
   return (
-    <List>
-      {isLoading &&
-        skeletons.map((skeleton) => <GenreListSkeleton key={skeleton} />)}
-      {data.map((genre) => (
-        <ListItem key={genre.id} paddingY="5px">
-          <HStack>
-            <Image
-              boxSize="32px"
-              borderRadius={8}
-              src={extendUrlParams(
-                genre.image_background,
-                "media/",
-                "crop/600/400/"
-              )}
-            />
-            <Button
-              onClick={() => onSelectGenre(genre)}
-              fontSize="lg"
-              variant="link"
-              fontWeight={selectedGenre?.id === genre.id ? "bold" : "normal"}
-            >
-              {genre.name}
-            </Button>
-          </HStack>
-        </ListItem>
-      ))}
-    </List>
+    <>
+      <Heading fontSize="2xl" marginBottom={3}>
+        Genres
+      </Heading>
+      <List>
+        {isLoading &&
+          skeletons.map((skeleton) => <GenreListSkeleton key={skeleton} />)}
+        {data.map((genre) => (
+          <ListItem key={genre.id} paddingY="5px">
+            <HStack>
+              <Image
+                boxSize="32px"
+                borderRadius={8}
+                // This makes the image scale to fit the size of it's container while preserving its aspect ratio
+                objectFit="cover"
+                src={extendUrlParams(
+                  genre.image_background,
+                  "media/",
+                  "crop/600/400/"
+                )}
+              />
+              <Button
+                onClick={() => onSelectGenre(genre)}
+                fontSize="lg"
+                variant="link"
+                fontWeight={selectedGenre?.id === genre.id ? "bold" : "normal"}
+                whiteSpace="normal"
+                textAlign="left"
+              >
+                {genre.name}
+              </Button>
+            </HStack>
+          </ListItem>
+        ))}
+      </List>
+    </>
   );
 };
 
