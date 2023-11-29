@@ -12,7 +12,7 @@ const GameCardContainer = ({ children }: Props) => {
   return (
     // Here we use the generic "Box" component from Chakra UI which is just Chakra's version of a <div>
     // Doing it this way, gives us access to Chakra's style props
-    <Box width={300} borderRadius={10} overflow="hidden">
+    <Box width="100%" borderRadius={10} overflow="hidden">
       {children}
     </Box>
   );
