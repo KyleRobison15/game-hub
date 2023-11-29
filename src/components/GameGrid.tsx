@@ -8,7 +8,7 @@ const GameGrid = () => {
   // The useGames hook is a custom hook we created that returns two objects:
   // games -> The array of games we get from making a GET request to the /games endpoint of the RAWG.io API
   // error -> An error object if there are any errors when making our GET request
-  const { games, error, isLoading } = useGames();
+  const { data, error, isLoading } = useGames();
 
   // A local variable works here because it is not going to change over time
   // We are initilizing the skeletons array with 6 indexes every time so we can render six skeletons on the page
@@ -30,7 +30,7 @@ const GameGrid = () => {
               <GameCardSkeleton key={skeleton} />
             </GameCardContainer>
           ))}
-        {games.map((game) => (
+        {data.map((game) => (
           <GameCardContainer>
             <GameCard key={game.id} game={game} />
           </GameCardContainer>
