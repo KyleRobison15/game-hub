@@ -5,6 +5,10 @@
  */
 
 const extendUrlParams = (url: string, target: string, addedParams: string) => {
+  if (!url) {
+    return "";
+  }
+
   // Find the starting position of the target parameter in the URL
   // Then move the position to the end of the parameter
   // The resulting position in the URL is the last character of our target param
